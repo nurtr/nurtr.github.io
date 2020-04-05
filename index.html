@@ -84,11 +84,47 @@
                 Nurtr, your new personal assistant to maintaining happy and
                 healthy relationships.
               </h1>
-              <a
+              <section class="email-form" id="email-form">
+                <form
+                  action="https://docs.google.com/forms/d/1CaW2N9oFfA9kvmPF0-a2KpoYqLgmXx5SMNSn8AXGeaY/formResponse"
+                  id="mG61Hd"
+                  method="POST"
+                  target="_self"
+                >
+                  <input
+                    type="email"
+                    name="emailAddress"
+                    required=""
+                    autocomplete="email"
+                    size="25"
+                    placeholder="email address"
+                  />
+                  <fieldset class="honeypot-field">
+                    <label for="honeypot"
+                      >To help avoid spam, utilize a Honeypot technique with a
+                      hidden text field; must be empty to submit the form!
+                      Otherwise, we assume the user is a spam bot.</label
+                    >
+                    <input id="honeypot" type="text" name="honeypot" value="" />
+                  </fieldset>
+                  <button
+                    type="submit"
+                    class="btn btn-outline btn-xl js-scroll-trigger"
+                  >
+                    Sign up today!
+                  </button>
+                </form>
+                <div id="signup-complete" style="display: none;">
+                  <div class="header">
+                    <h1 id="great-ill">Great! We'll be in touch once ready</h1>
+                  </div>
+                </div>
+              </section>
+              <!-- <a
                 href="#download"
                 class="btn btn-outline btn-xl js-scroll-trigger"
                 >Start Now for Free!</a
-              >
+              > -->
             </div>
           </div>
           <div class="col-lg-5 my-auto">
@@ -114,22 +150,6 @@
       </div>
     </header>
 
-    <div>
-      <div class="email-form">	
-							<form action="https://docs.google.com/forms/d/1CaW2N9oFfA9kvmPF0-a2KpoYqLgmXx5SMNSn8AXGeaY/formResponse" id="mG61Hd" method="POST" target="_self">
-								<input type="email" name="emailAddress" required="" autocomplete="email" size="40" placeholder="email address">
-								<button type="submit">Submit</button>
-							</form>
-						</div>
-					</div>
-					<div id="signup-complete" style="display:none">
-						<div class="header">
-							<h1 id="great-ill">Great! I'll be in touch</h1>
-						</div>
-          </div>
-          // TODO: Add honeypot tag
-    </div>
-
     <!-- <section class="download bg-secondary text-center" id="download">
       <div class="container">
         <div class="row">
@@ -150,9 +170,10 @@
           </div>
         </div>
       </div>
-    </section> -->
+    </div>
+  </section>
 
-    <!-- <section class="features" id="features">
+   <section class="features" id="features">
     <div class="container">
       <div class="section-heading text-center">
         <h2>Unlimited Features, Unlimited Fun</h2>
@@ -280,71 +301,75 @@
     <script src="js/new-age.min.js"></script>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    
+
     <!-- email form -->
     <script type="text/javascript">
       var submitted = false;
-      $('form').on('submit', function(e){
-        e.preventDefault();//don't redirect
-        if(submitted)return;
+      $("form").on("submit", function (e) {
+        e.preventDefault(); //don't redirect
+        if (submitted) return;
         var $this = $(this);
-            var $emailField = $this.find('input[name=emailAddress]');
-            var $submitButton = $this.find('button[type=submit]');
+        var $emailField = $this.find("input[name=emailAddress]");
+        var $submitButton = $this.find("button[type=submit]");
+        var $honeypot = $this.find("input[name=honeypot]");
 
-        if(!$emailField.val().trim()){
-            $emailField.toggleClass('alert', true);
-            return;
+        if (!$emailField.val().trim() || $honeypot.val().trim()) {
+          $emailField.toggleClass("alert", true);
+          return;
         }
 
         var data = {
-            'emailAddress': $emailField.val()
+          emailAddress: $emailField.val(),
         };
 
         $.ajax({
-            url: $this.attr('action'),
-            type: 'POST',
-            data: data,
-            beforeSend: function(){
-                $submitButton.attr('disabled', 'disabled');  
-            }
-        }).done(function(data) {
-            $submitButton.attr('disabled', false);
+          url: $this.attr("action"),
+          type: "POST",
+          data: data,
+          beforeSend: function () {
+            $submitButton.attr("disabled", "disabled");
+          },
+        }).done(function (data) {
+          $submitButton.attr("disabled", false);
         });
 
-        $('#signup').fadeOut();
-        $('#signup-complete').fadeIn(function(){
+        $("#signup").fadeOut();
+        $("#signup-complete").fadeIn(function () {
           PageContainer.updateHeight(true);
         });
 
         submitted = true;
       });
     </script>
-      <!-- track pages-container content height -->
-      <script type="text/javascript">
-      var PageContainer = (function(){
-          $pagesContainer = $('.pages-container');
+    <!-- track pages-container content height -->
+    <script type="text/javascript">
+      var PageContainer = (function () {
+        $pagesContainer = $(".pages-container");
 
-          function updateHeight(animate){
-            var totalHeight = 0;
-            var children = $pagesContainer.children();
-            for (var i = 0; i < children.length; i++) {
-              var c = $(children[i]);
-              if(!c.is(":visible")) continue;
-              totalHeight += c.position().top+c.outerHeight(true);
-            };
-
-            if(animate)
-              $pagesContainer.stop(true, false).animate({'min-height':totalHeight}, 300);
-            else
-            $pagesContainer.css('min-height', totalHeight);
+        function updateHeight(animate) {
+          var totalHeight = 0;
+          var children = $pagesContainer.children();
+          for (var i = 0; i < children.length; i++) {
+            var c = $(children[i]);
+            if (!c.is(":visible")) continue;
+            totalHeight += c.position().top + c.outerHeight(true);
           }
 
+          if (animate)
+            $pagesContainer
+              .stop(true, false)
+              .animate({ "min-height": totalHeight }, 300);
+          else $pagesContainer.css("min-height", totalHeight);
+        }
+
+        updateHeight(false);
+        $(window).resize(function () {
           updateHeight(false);
-          $( window ).resize(function(){updateHeight(false);});
-          return {
-            updateHeight: updateHeight
-          }
-        })();
-      </script>
+        });
+        return {
+          updateHeight: updateHeight,
+        };
+      })();
+    </script>
   </body>
 </html>
